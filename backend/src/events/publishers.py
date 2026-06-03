@@ -77,24 +77,25 @@ class KafkaEventPublisher(EventPublisher):
             raise RuntimeError("KafkaEventPublisher no inicializado")
 
         topic = get_topic_for_event(event)
+        topic_name = topic.value if hasattr(topic, "value") else str(topic)
         body = json.dumps(event.to_dict(), ensure_ascii=True).encode("utf-8")
         logger.info(
             "Publicando evento Kafka event_id=%s event_name=%s topic=%s",
             event.event_id,
             event.event_name,
-            topic,
+            topic_name,
         )
 
         # Retry logic
         last_error = None
         for attempt in range(self._max_retries):
             try:
-                await self._producer.send_and_wait(topic, body)
+                await self._producer.send_and_wait(topic_name, body)
                 logger.info(
                     "Evento publicado: event_id=%s event_name=%s topic=%s",
                     event.event_id,
                     event.event_name,
-                    topic,
+                    topic_name,
                 )
                 return
             except Exception as exc:
@@ -104,7 +105,7 @@ class KafkaEventPublisher(EventPublisher):
                     attempt + 1,
                     self._max_retries,
                     event.event_id,
-                    topic,
+                    topic_name,
                     str(exc),
                 )
 
@@ -114,7 +115,7 @@ class KafkaEventPublisher(EventPublisher):
             self._max_retries,
             event.event_id,
             event.event_name,
-            topic,
+            topic_name,
         )
         if self._dead_letter_repository is not None:
             try:

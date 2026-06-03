@@ -147,7 +147,7 @@ def test_event_router_maps_image_uploaded() -> None:
     )
 
     topic = get_topic_for_event(event)
-    assert topic == KafkaTopics.IMAGE_UPLOADED
+    assert topic == KafkaTopics.IMAGE_UPLOADED.value
 
 
 def test_event_router_maps_analysis_completed() -> None:
@@ -162,7 +162,7 @@ def test_event_router_maps_analysis_completed() -> None:
     )
 
     topic = get_topic_for_event(event)
-    assert topic == KafkaTopics.ANALYSIS_COMPLETED
+    assert topic == KafkaTopics.ANALYSIS_COMPLETED.value
 
 
 def test_event_router_maps_auth_events() -> None:
@@ -170,7 +170,7 @@ def test_event_router_maps_auth_events() -> None:
     event = create_user_register_event(user_id="u1", email="test@example.com", name="User Test")
 
     topic = get_topic_for_event(event)
-    assert topic == KafkaTopics.AUTH_EVENTS
+    assert topic == KafkaTopics.AUTH_EVENTS.value
 
 
 def test_event_router_unmapped_event_goes_to_dead_letter() -> None:
@@ -182,4 +182,4 @@ def test_event_router_unmapped_event_goes_to_dead_letter() -> None:
     )
 
     topic = get_topic_for_event(event)
-    assert topic == KafkaTopics.DEAD_LETTER
+    assert topic == KafkaTopics.DEAD_LETTER.value

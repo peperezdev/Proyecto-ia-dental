@@ -9,5 +9,6 @@ def get_topic_for_event(event: Event) -> str:
     topic = EVENT_NAME_TO_TOPIC.get(event.event_name)
     if topic is None:
         # Si no hay mapeo, ir a dead-letter
-        return KafkaTopics.DEAD_LETTER
-    return topic
+        return KafkaTopics.DEAD_LETTER.value
+    return topic.value
+
