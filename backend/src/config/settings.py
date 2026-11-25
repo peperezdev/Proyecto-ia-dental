@@ -25,9 +25,9 @@ class Settings(BaseSettings):
     mongo_analyses_collection: str = "analyses"
     mongo_users_collection: str = "users"
 
-#     model_path: str = "../entrenamiento ia pruebas/best.pt"
-#     model_path: str = "./model/best.pt"
-    model_path: str = "../entrenamiento ia/runs/train/dental_definitivo_optimizado_medium/weights/best.pt"
+    # model_path: str = "../entrenamiento ia pruebas/best.pt"
+    model_path: str = "./model/best.pt"
+    # model_path: str = "../entrenamiento ia/runs/train/dental_definitivo_optimizado_medium/weights/best.pt"
     model_version: str = "best.pt"
     model_device: str = "auto"
     model_warmup_on_startup: bool = True
@@ -42,11 +42,6 @@ class Settings(BaseSettings):
 
     events_enabled: bool = True
     events_transport: str = "log"
-    kafka_enabled: bool = False
-    kafka_bootstrap_servers: str = "localhost:9092"
-    kafka_inference_consumer_enabled: bool = False
-    kafka_inference_consumer_group_id: str = "dental-inference-consumer"
-    kafka_inference_consumer_offset_reset: str = "latest"
     # Configuración de eventos multicanal
     event_format_version: int = 1
     event_dead_letter_enabled: bool = True

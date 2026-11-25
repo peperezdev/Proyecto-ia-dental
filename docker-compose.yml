@@ -1,0 +1,67 @@
+services:
+  # ==========================================
+  # FRONTEND
+  # ==========================================
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: frontend-web
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - ia_dental_net
+
+  # ==========================================
+  # BACKEND & DATABASE
+  # ==========================================
+  mongo:
+    image: mongo:7
+    container_name: dental-ai-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: dental_ai
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ia_dental_net
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: backend-api
+    working_dir: /app/backend
+    environment:
+      - DENTAL_AI_MONGO_URI=mongodb://mongo:27017
+      - DENTAL_AI_MODEL_PATH=src/model/best.pt
+    volumes:
+      - ./backend:/app/backend
+      - backend_uploads:/app/backend/storage/uploads
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - ia_dental_net
+
+volumes:
+  backend_uploads:
+  mongo_data:
+
+networks:
+  ia_dental_net:
+    driver: bridge

@@ -15,18 +15,6 @@ LEVANTAR_DOCKER() {
     fi
 }
 
-LEVANTAR_DOCKER_CARPETA() {
-    echo -e "\e[36mLevantando los contenedores de la carpeta docker...\e[0m"
-    if [ -d "docker" ]; then
-        cd docker
-        docker compose -f docker-compose.yml up -d
-        cd ..
-        echo -e "\e[32mContenedores de la carpeta docker levantados.\e[0m"
-    else
-        echo -e "\e[33mNo se encontró la carpeta docker.\e[0m"
-    fi
-}
-
 LEVANTAR_FRONTEND() {
     echo -e "\e[36mIniciando el frontend...\e[0m"
     if command -v gnome-terminal &> /dev/null; then
@@ -65,7 +53,6 @@ LEVANTAR_BACKEND() {
 
 LEVANTAR_TODO() {
     LEVANTAR_DOCKER
-    LEVANTAR_DOCKER_CARPETA
     sleep 2
     LEVANTAR_BACKEND
     LEVANTAR_FRONTEND
@@ -79,17 +66,6 @@ CERRAR_DOCKER() {
         cd ..
     else
         echo -e "\e[33mNo se encontró el archivo docker-compose.mongo.yml en backend.\e[0m"
-    fi
-}
-
-CERRAR_DOCKER_CARPETA() {
-    if [ -f "docker/docker-compose.yml" ]; then
-        cd docker
-        echo -e "\e[36mDeteniendo contenedores de la carpeta docker...\e[0m"
-        docker compose -f docker-compose.yml stop
-        cd ..
-    else
-        echo -e "\e[33mNo se encontró el archivo docker-compose.yml en la carpeta docker.\e[0m"
     fi
 }
 
@@ -109,7 +85,6 @@ CERRAR_BACKEND() {
 CERRAR_TODO() {
     echo -e "\e[32mCerrando la aplicación de IA Dental...\e[0m"
     CERRAR_DOCKER
-    CERRAR_DOCKER_CARPETA
     CERRAR_BACKEND
     CERRAR_FRONTEND
     echo -e "\e[32mAplicación detenida completamente.\e[0m"
@@ -122,34 +97,30 @@ while true; do
     echo -e "\e[36m=========================================\e[0m"
     echo " --- Opciones para Levantar ---"
     echo " 1. Levantar Docker (MongoDB - Backend)"
-    echo " 2. Levantar Docker (Carpeta 'docker')"
-    echo " 3. Levantar Backend (Uvicorn)"
-    echo " 4. Levantar Frontend (Vite)"
-    echo " 5. Levantar TODO"
+    echo " 2. Levantar Backend (Uvicorn)"
+    echo " 3. Levantar Frontend (Vite)"
+    echo " 4. Levantar TODO (MongoDB + Backend + Frontend)"
     echo " --- Opciones para Cerrar ---"
-    echo " 6. Cerrar Docker (MongoDB - Backend)"
-    echo " 7. Cerrar Docker (Carpeta 'docker')"
-    echo " 8. Cerrar Backend (Uvicorn)"
-    echo " 9. Cerrar Frontend (Vite)"
-    echo " 10. Cerrar TODO"
+    echo " 5. Cerrar Docker (MongoDB - Backend)"
+    echo " 6. Cerrar Backend (Uvicorn)"
+    echo " 7. Cerrar Frontend (Vite)"
+    echo " 8. Cerrar TODO"
     echo " ----------------------------"
-    echo " 11. Salir"
+    echo " 9. Salir"
     echo -e "\e[36m=========================================\e[0m"
-    read -p "Elige una opción (1-11): " opcion
+    read -p "Elige una opción (1-9): " opcion
 
     case $opcion in
         1) LEVANTAR_DOCKER ;;
-        2) LEVANTAR_DOCKER_CARPETA ;;
-        3) LEVANTAR_BACKEND ;;
-        4) LEVANTAR_FRONTEND ;;
-        5) LEVANTAR_TODO ;;
-        6) CERRAR_DOCKER ;;
-        7) CERRAR_DOCKER_CARPETA ;;
-        8) CERRAR_BACKEND ;;
-        9) CERRAR_FRONTEND ;;
-        10) CERRAR_TODO ;;
-        11) echo -e "\e[32mSaliendo...\e[0m"; exit 0 ;;
-        *) echo -e "\e[31mOpción no válida. Por favor, elige una opción entre 1 y 11.\e[0m" ;;
+        2) LEVANTAR_BACKEND ;;
+        3) LEVANTAR_FRONTEND ;;
+        4) LEVANTAR_TODO ;;
+        5) CERRAR_DOCKER ;;
+        6) CERRAR_BACKEND ;;
+        7) CERRAR_FRONTEND ;;
+        8) CERRAR_TODO ;;
+        9) echo -e "\e[32mSaliendo...\e[0m"; exit 0 ;;
+        *) echo -e "\e[31mOpción no válida. Por favor, elige una opción entre 1 y 9.\e[0m" ;;
     esac
 done
 

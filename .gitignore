@@ -1,10 +1,4 @@
 # =========================
-# Docker - Datos en tiempo de ejecucion
-# =========================
-docker/data/
-!docker/data/logstash_pipeline/
-
-# =========================
 # PhpStorm (JetBrains IDEs)
 # =========================
 .idea/
@@ -86,3 +80,6 @@ ehthumbs.db
 Thumbs.db
 
 .env
+
+#Imágenes de prueba
+backend/storage/uploads
