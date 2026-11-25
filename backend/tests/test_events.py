@@ -12,11 +12,9 @@ from src.events.analysis_events import (
     create_analysis_requested_event,
 )
 from src.events.auth_events import create_user_register_event
-from src.events.event_router import get_topic_for_event
 from src.events.image_events import create_image_uploaded_event
 from src.events.models import Event, create_event
 from src.events.system_events import create_system_error_event
-from src.events.topics import KafkaTopics
 
 
 def test_create_event_generates_event_id() -> None:
@@ -133,53 +131,3 @@ def test_event_to_dict_serialization() -> None:
     assert isinstance(data["timestamp"], str)  # datetime convertido a ISO string
     assert data["event_name"] == "test.event"
     assert data["payload"] == {"key": "value"}
-
-
-def test_event_router_maps_image_uploaded() -> None:
-    """Test que event router mapea image.uploaded correctamente."""
-    event = create_image_uploaded_event(
-        analysis_id="a1",
-        user_id="u1",
-        file_name="test.jpg",
-        mime_type="image/jpeg",
-        file_size_bytes=1024,
-        file_path="/tmp/test.jpg",
-    )
-
-    topic = get_topic_for_event(event)
-    assert topic == KafkaTopics.IMAGE_UPLOADED
-
-
-def test_event_router_maps_analysis_completed() -> None:
-    """Test que event router mapea analysis.completed correctamente."""
-    event = create_analysis_completed_event(
-        analysis_id="a1",
-        user_id="u1",
-        status="COMPLETED",
-        detections_count=5,
-        inference_time_ms=20.0,
-        model_version="v1",
-    )
-
-    topic = get_topic_for_event(event)
-    assert topic == KafkaTopics.ANALYSIS_COMPLETED
-
-
-def test_event_router_maps_auth_events() -> None:
-    """Test que event router mapea auth events al topic correcto."""
-    event = create_user_register_event(user_id="u1", email="test@example.com", name="User Test")
-
-    topic = get_topic_for_event(event)
-    assert topic == KafkaTopics.AUTH_EVENTS
-
-
-def test_event_router_unmapped_event_goes_to_dead_letter() -> None:
-    """Test que evento sin mapeo va a dead letter."""
-    event = create_event(
-        event_name="unmapped.event",
-        payload={},
-        source="TestSource",
-    )
-
-    topic = get_topic_for_event(event)
-    assert topic == KafkaTopics.DEAD_LETTER

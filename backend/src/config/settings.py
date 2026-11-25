@@ -42,11 +42,6 @@ class Settings(BaseSettings):
 
     events_enabled: bool = True
     events_transport: str = "log"
-    kafka_enabled: bool = False
-    kafka_bootstrap_servers: str = "localhost:9092"
-    kafka_inference_consumer_enabled: bool = False
-    kafka_inference_consumer_group_id: str = "dental-inference-consumer"
-    kafka_inference_consumer_offset_reset: str = "latest"
     # Configuración de eventos multicanal
     event_format_version: int = 1
     event_dead_letter_enabled: bool = True

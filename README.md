@@ -100,9 +100,8 @@ El backend requiere una instancia de MongoDB. Puedes levantar el contenedor Dock
   cd backend
   docker compose -f docker-compose.mongo.yml up -d
   ```
-- **Contenedores completos (MongoDB, Kafka, Zookeeper)**:
+- **Stack completo en Docker (Frontend, Backend, MongoDB)**:
   ```bash
-  cd docker
   docker compose up -d
   ```
 
@@ -162,7 +161,6 @@ El backend requiere una instancia de MongoDB. Puedes levantar el contenedor Dock
 Proyecto-ia-dental/
 ├── backend/                # Servidor FastAPI, lógica de negocio y ejecución modelo IA
 ├── frontend/               # Aplicación web en Vue.js + Vite + TailwindCSS
-├── docker/                 # Archivos de configuración general para contenedores
 ├── entrenamiento ia/       # Scripts, datasets y pesos (weights) del modelo YOLOv8
 ├── capturas/               # Imágenes y demostraciones para la documentación
 ├── start_aplicacion.ps1    # Script lanzador interactivo para Windows
